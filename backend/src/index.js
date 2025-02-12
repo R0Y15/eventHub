@@ -24,7 +24,12 @@ app.use(compression());
 
 // Configure CORS
 const corsOptions = {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: [
+        process.env.FRONTEND_URL || 'http://localhost:3000',
+        'https://swissmote.vercel.app',
+        'https://ef-cth.vercel.app',
+        /\.vercel\.app$/
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Force CSS loading */
+:root {
+  color-scheme: light;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -51,11 +56,16 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border antialiased;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen;
   }
+}
+
+/* Ensure styles are loaded */
+#__next {
+  @apply min-h-screen flex flex-col;
 }
 
 @layer utilities {
