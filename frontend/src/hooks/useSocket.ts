@@ -16,7 +16,7 @@ export function useSocket(isAdmin?: boolean) {
     if (!isBrowser) return;
 
     if (!socket) {
-      const socketUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const socketUrl = process.env.NEXT_PUBLIC_API_URL || 'https://eventhub-021d.onrender.com';
       console.log('Initializing socket connection to:', socketUrl);
       
       socket = io(socketUrl, {

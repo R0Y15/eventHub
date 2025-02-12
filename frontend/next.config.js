@@ -8,7 +8,7 @@ const nextConfig = {
   },
   output: 'standalone',
   images: {
-    domains: ['localhost', 'your-backend-url.railway.app'],
+    domains: ['localhost', 'eventhub-021d.onrender.com'],
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
