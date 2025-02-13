@@ -8,6 +8,7 @@ const multer = require('multer');
 const path = require('path');
 const helmet = require('helmet');
 const compression = require('compression');
+const { uploadToCloudinary } = require('./utils/cloudinary');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -59,17 +60,8 @@ io.engine.on("initial_headers", (headers, req) => {
     console.log('Socket initial headers:', headers);
 });
 
-// Configure multer for image uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
-});
-
+// Configure multer for memory storage
+const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
     limits: {
@@ -77,9 +69,8 @@ const upload = multer({
     },
     fileFilter: function (req, file, cb) {
         const allowedTypes = /jpeg|jpg|png|gif/;
-        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
         const mimetype = allowedTypes.test(file.mimetype);
-        if (extname && mimetype) {
+        if (mimetype) {
             return cb(null, true);
         }
         cb(new Error('Only image files are allowed!'));
@@ -91,7 +82,6 @@ app.set('io', io);
 
 // Middleware
 app.use(express.json());
-app.use('/uploads', express.static('uploads')); // Serve uploaded files
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/event-management')
@@ -99,12 +89,38 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/event-man
     .catch((err) => console.error('MongoDB connection error:', err));
 
 // Image upload route
-app.post('/api/upload', upload.single('image'), (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded' });
+app.post('/api/upload', upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+
+        // Log file details for debugging
+        console.log('Received file:', {
+            originalname: req.file.originalname,
+            mimetype: req.file.mimetype,
+            size: req.file.size,
+            buffer: req.file.buffer ? 'Buffer present' : 'No buffer'
+        });
+        
+        try {
+            const imageUrl = await uploadToCloudinary(req.file);
+            console.log('Upload successful:', imageUrl);
+            res.json({ imageUrl });
+        } catch (cloudinaryError) {
+            console.error('Cloudinary upload error:', cloudinaryError);
+            res.status(500).json({ 
+                error: 'Failed to upload image to cloud storage',
+                details: cloudinaryError.message 
+            });
+        }
+    } catch (error) {
+        console.error('Upload handling error:', error);
+        res.status(500).json({ 
+            error: 'Failed to process image upload',
+            details: error.message 
+        });
     }
-    const imageUrl = `${process.env.API_URL || 'http://localhost:5000'}/uploads/${req.file.filename}`;
-    res.json({ imageUrl });
 });
 
 // Routes
