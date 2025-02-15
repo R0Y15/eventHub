@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: swissmote-backend
+    env: node
+    region: singapore # Choose the region closest to your users
+    plan: free # Using free tier
+    buildCommand: npm install
+    startCommand: node src/index.js
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false # This will be set manually in Render dashboard
+      - key: JWT_SECRET
+        sync: false # This will be set manually in Render dashboard
+      - key: FRONTEND_URL
+        value: https://swissmote.vercel.app
+      - key: API_URL
+        fromService:
+          type: web
+          name: swissmote-backend
+          property: url
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+    autoDeploy: true # Enable auto deploy on push to main branch
+    disk:
+      name: tmp
+      mountPath: /tmp
+      sizeGB: 1
+    scaling:
+      minInstances: 1
+      maxInstances: 1
+      targetMemoryPercent: 80 # Scale when memory usage hits 80%
+    headers:
+      - path: /*
+        name: Access-Control-Allow-Origin
+        value: https://swissmote.vercel.app 

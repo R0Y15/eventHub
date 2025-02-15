@@ -14,7 +14,7 @@ export const useServerStatus = () => {
         setIsLoading(false);
       }
     } catch (err) {
-      setError('Server is starting up...');
+      setError('Firing up the server...');
       // Retry after 3 seconds
       setTimeout(checkServer, 3000);
     }
