@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { getCurrentUser } from '@/lib/api';
 import Link from 'next/link';
+import { Opulento } from "uvcanvas";
 
 export default function Home() {
   const [token, setToken] = useState<string | null>(null);
@@ -50,53 +51,89 @@ export default function Home() {
 
   if (!token) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="min-h-screen w-full relative flex items-center justify-center p-4">
+        <div className="fixed inset-0 -z-10">
+          <Opulento />
+        </div>
+
+        <div className="max-w-6xl w-full mx-auto border border-white/30 rounded-2xl p-12 bg-black/40 backdrop-blur-md">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to EventHub</h1>
-            <p className="text-lg text-gray-600">Join us to discover and participate in amazing events!</p>
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+              Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">EventHub</span>
+            </h1>
+            <p className="text-gray-200 text-lg drop-shadow-md">
+              Join us to discover and participate in amazing events!
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle>User Access</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-600">Register or login to:</p>
-                <ul className="list-disc list-inside text-gray-600 mb-4">
-                  <li>View upcoming events</li>
-                  <li>Register for events</li>
-                  <li>Track your registrations</li>
-                </ul>
-                <div className="space-x-4">
-                  <Link href="/login">
-                    <Button variant="outline">Login</Button>
-                  </Link>
-                  <Link href="/register">
-                    <Button>Register</Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Admin Access</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-600">Admin portal for:</p>
-                <ul className="list-disc list-inside text-gray-600 mb-4">
-                  <li>Event management</li>
-                  <li>User management</li>
-                  <li>Registration tracking</li>
-                </ul>
-                <Link href="/admin/login">
-                  <Button variant="outline">Admin Login</Button>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* User Access Card */}
+            <div className="backdrop-blur-md bg-black/50 p-8 rounded-2xl shadow-xl border border-white/20 hover:border-white/40 transition-all hover:bg-black/60">
+              <h2 className="text-2xl font-semibold mb-4 text-white">
+                User Access
+              </h2>
+              <p className="text-gray-300 mb-6">
+                Register or login to:
+              </p>
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-center text-gray-200">
+                  <span className="mr-2 text-violet-400">•</span>
+                  View upcoming events
+                </li>
+                <li className="flex items-center text-gray-200">
+                  <span className="mr-2 text-violet-400">•</span>
+                  Register for events
+                </li>
+                <li className="flex items-center text-gray-200">
+                  <span className="mr-2 text-violet-400">•</span>
+                  Track your registrations
+                </li>
+              </ul>
+              <div className="flex gap-4">
+                <Link href="/login">
+                  <button className="px-6 py-2.5 bg-white/90 hover:bg-white text-gray-900 rounded-lg transition-all font-medium hover:shadow-lg hover:shadow-white/20">
+                    Login
+                  </button>
                 </Link>
-              </CardContent>
-            </Card>
+                <Link href="/register">
+                  <button className="px-6 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-all font-medium hover:shadow-lg hover:shadow-violet-500/30">
+                    Register
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Admin Access Card */}
+            <div className="backdrop-blur-md bg-black/50 p-8 rounded-2xl shadow-xl border border-white/20 hover:border-white/40 transition-all hover:bg-black/60">
+              <h2 className="text-2xl font-semibold mb-4 text-white">
+                Admin Access
+              </h2>
+              <p className="text-gray-300 mb-6">
+                Admin portal for:
+              </p>
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-center text-gray-200">
+                  <span className="mr-2 text-fuchsia-400">•</span>
+                  Event management
+                </li>
+                <li className="flex items-center text-gray-200">
+                  <span className="mr-2 text-fuchsia-400">•</span>
+                  User management
+                </li>
+                <li className="flex items-center text-gray-200">
+                  <span className="mr-2 text-fuchsia-400">•</span>
+                  Registration tracking
+                </li>
+              </ul>
+              <Link href="/admin/login">
+                <button className="px-6 py-2.5 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white rounded-lg transition-all font-medium hover:shadow-lg hover:shadow-fuchsia-500/30">
+                  Admin Login
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 
