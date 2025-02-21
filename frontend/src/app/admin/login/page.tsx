@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { login, getCurrentUser } from '@/lib/api';
+import AuthLayout from '@/components/auth/AuthLayout';
+import { AnimatePresence } from 'framer-motion';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -72,39 +74,49 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle className="text-center">Admin Login</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Input
-                type="email"
-                placeholder="Admin Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={isLoading}
-              />
-            </div>
-            <div className="space-y-2">
-              <Input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={isLoading}
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Loading...' : 'Login as Admin'}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+    <AnimatePresence mode="wait">
+      <AuthLayout>
+        <h1 className="text-center text-3xl font-bold text-white mb-8">Admin Login</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Input
+              type="email"
+              placeholder="Admin Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={isLoading}
+              className="bg-white/10 border-white/20 text-white placeholder:text-gray-300 h-12 px-4"
+            />
+          </div>
+          <div className="space-y-2">
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={isLoading}
+              className="bg-white/10 border-white/20 text-white placeholder:text-gray-300 h-12 px-4"
+            />
+          </div>
+          <Button 
+            type="submit" 
+            className="w-full bg-white hover:bg-gray-100 text-gray-900 h-12 font-medium transition-colors"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Loading...' : 'Login as Admin'}
+          </Button>
+        </form>
+        <div className="mt-4 text-center">
+          <Link 
+            href="/login" 
+            className="text-gray-200 hover:text-white transition-colors text-sm"
+          >
+            Return to User Login
+          </Link>
+        </div>
+      </AuthLayout>
+    </AnimatePresence>
   );
 } 
