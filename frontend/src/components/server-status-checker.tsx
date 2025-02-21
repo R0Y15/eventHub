@@ -8,5 +8,5 @@ export function ServerStatusChecker() {
 
   if (!isLoading) return null;
   
-  // return <ServerLoader error={error} />;
+  return <ServerLoader error={error} />;
 } 
