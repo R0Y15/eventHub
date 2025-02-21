@@ -2,8 +2,10 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Layout from '@/components/layout/Layout';
+import Link from 'next/link';
 import LoginForm from '@/components/auth/LoginForm';
+import AuthLayout from '@/components/auth/AuthLayout';
+import { AnimatePresence } from 'framer-motion';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,10 +23,19 @@ export default function LoginPage() {
   };
 
   return (
-    <Layout>
-      <div className="min-h-[80vh] flex items-center justify-center">
+    <AnimatePresence mode="wait">
+      <AuthLayout>
+        <h1 className="text-center text-3xl font-bold text-white mb-8">Login</h1>
         <LoginForm onSuccess={handleLoginSuccess} />
-      </div>
-    </Layout>
+        <div className="mt-4 text-center">
+          <p className="text-gray-200">
+            Don't have an account?{' '}
+            <Link href="/register" className="text-violet-400 hover:text-violet-300 transition-colors">
+              Register here
+            </Link>
+          </p>
+        </div>
+      </AuthLayout>
+    </AnimatePresence>
   );
 } 

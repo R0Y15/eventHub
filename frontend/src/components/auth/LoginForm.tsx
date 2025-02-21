@@ -57,10 +57,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   };
 
   return (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle>Login</CardTitle>
-      </CardHeader>
+    <Card className="border-0 bg-transparent shadow-none">
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -71,6 +68,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={isLoading}
+              className="bg-white/10 border-white/20 text-white placeholder:text-gray-300 h-12 px-4"
             />
           </div>
           <div className="space-y-2">
@@ -81,16 +79,20 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={isLoading}
+              className="bg-white/10 border-white/20 text-white placeholder:text-gray-300 h-12 px-4"
             />
           </div>
           <div className="space-y-2">
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button 
+              type="submit" 
+              className="w-full bg-white hover:bg-gray-100 text-gray-900 h-12 font-medium transition-colors"
+              disabled={isLoading}
+            >
               {isLoading ? 'Loading...' : 'Login'}
             </Button>
             <Button
               type="button"
-              variant="outline"
-              className="w-full"
+              className="w-full bg-white hover:bg-gray-100 text-gray-900 h-12 font-medium transition-colors"
               onClick={handleGuestLogin}
               disabled={isLoading}
             >
